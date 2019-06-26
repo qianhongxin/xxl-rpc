@@ -42,6 +42,9 @@ public class ZkServiceRegistry extends ServiceRegistry {
     private Thread refreshThread;
     private volatile boolean refreshThreadStop = false;
 
+    // registryData用于保存向zk注册的值。discoryData用于保存从zk拉取到的值缓存起来。
+    // 这里是每 60 秒更新这两个集合。所以会有 60 秒的延迟
+    // 用两个集合，可以避免多线程操作时的锁竞争，这里用两个集合就可以不用处理多线程并发的问题了，通过隔离变量提高并发性能
     private volatile ConcurrentMap<String, TreeSet<String>> registryData = new ConcurrentHashMap<String, TreeSet<String>>();
     private volatile ConcurrentMap<String, TreeSet<String>> discoveryData = new ConcurrentHashMap<String, TreeSet<String>>();
 

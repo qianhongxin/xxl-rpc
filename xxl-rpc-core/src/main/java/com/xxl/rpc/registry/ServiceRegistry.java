@@ -19,17 +19,23 @@ public abstract class ServiceRegistry {
 
     /**
      * start
+     *
+     * 服务开启
      */
     public abstract void start(Map<String, String> param);
 
     /**
-     * start
+     * stop
+     *
+     * 服务停止
      */
     public abstract void stop();
 
 
     /**
      * registry service, for mult
+     *
+     * 服务注册
      *
      * @param keys      service key
      * @param value     service value/ip:port
@@ -41,6 +47,8 @@ public abstract class ServiceRegistry {
     /**
      * remove service, for mult
      *
+     * 服务移除
+     *
      * @param keys
      * @param value
      * @return
@@ -50,6 +58,8 @@ public abstract class ServiceRegistry {
     /**
      * discovery services, for mult
      *
+     * 多服务发现
+     *
      * @param keys
      * @return
      */
@@ -57,6 +67,8 @@ public abstract class ServiceRegistry {
 
     /**
      * discovery service, for one
+     *
+     * 单服务发现
      *
      * @param key   service key
      * @return      service value/ip:port
