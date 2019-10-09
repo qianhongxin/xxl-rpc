@@ -25,7 +25,6 @@
     </p>    
 </p>
 
-
 ## Introduction
 
 XXL-RPC is a high performance, distributed RPC framework.Provides a stable and high performance RPC function.
@@ -54,7 +53,6 @@ XXL-RPC 是一个分布式服务框架，提供稳定高性能的RPC远程服务
 - 11、解决1+1问题：传统分布式通讯一般通过nginx或f5做集群服务的流量负载均衡，每次请求在到达目标服务机器之前都需要经过负载均衡机器，即1+1，这将会把流量放大一倍。而XXL-RPC将会从消费方直达服务提供方，每次请求直达目标机器，从而可以避免上述问题；
 - 12、高兼容性：得益于优良的兼容性与模块化设计，不限制外部框架；除 spring/springboot 环境之外，理论上支持运行在任何Java代码中，甚至main方法直接启动运行；
 - 13、泛化调用：服务调用方不依赖服务方提供的API；
-
 
 ## Communication
 

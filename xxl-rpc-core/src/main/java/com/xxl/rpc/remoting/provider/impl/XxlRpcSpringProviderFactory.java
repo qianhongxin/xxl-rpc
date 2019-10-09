@@ -93,6 +93,7 @@ public class XxlRpcSpringProviderFactory extends XxlRpcProviderFactory implement
                 XxlRpcService xxlRpcService = serviceBean.getClass().getAnnotation(XxlRpcService.class);
 
                 String iface = serviceBean.getClass().getInterfaces()[0].getName();
+                // 接口的版本号, 跟http请求时的路径和请求头中加的版本号作用一样
                 String version = xxlRpcService.version();
 
                 super.addService(iface, version, serviceBean);
