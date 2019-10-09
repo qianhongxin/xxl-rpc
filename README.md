@@ -54,6 +54,9 @@ XXL-RPC 是一个分布式服务框架，提供稳定高性能的RPC远程服务
 - 12、高兼容性：得益于优良的兼容性与模块化设计，不限制外部框架；除 spring/springboot 环境之外，理论上支持运行在任何Java代码中，甚至main方法直接启动运行；
 - 13、泛化调用：服务调用方不依赖服务方提供的API；
 
+
+
+
 ## Communication
 
 - [社区交流](http://www.xuxueli.com/page/community.html)
