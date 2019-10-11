@@ -78,6 +78,7 @@ public class JettyServer extends Server {
 
 		// destroy server thread
 		if (thread!=null && thread.isAlive()) {
+			// 调用线程的interrupt方法，线程会阻塞，并抛出InterruptedException，可被捕获
 			thread.interrupt();
 		}
 

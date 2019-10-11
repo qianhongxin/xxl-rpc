@@ -102,6 +102,8 @@ public class XxlRpcProviderFactory {
 		// start server
 		serviceAddress = IpUtil.getIpPort(this.ip, port);
 		server = netType.serverClass.newInstance();
+		// server启动时的回调，观察者模式
+		// 执行服务发现
 		server.setStartedCallback(new BaseCallback() {		// serviceRegistry started
 			@Override
 			public void run() throws Exception {
@@ -115,6 +117,8 @@ public class XxlRpcProviderFactory {
 				}
 			}
 		});
+		// server注销时的回调，观察者模式
+		// 执行服务注销
 		server.setStopedCallback(new BaseCallback() {		// serviceRegistry stoped
 			@Override
 			public void run() {
@@ -128,6 +132,7 @@ public class XxlRpcProviderFactory {
 				}
 			}
 		});
+		// 启动网络的服务端，接收网络请求
 		server.start(this);
 	}
 

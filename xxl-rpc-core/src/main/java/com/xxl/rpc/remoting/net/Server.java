@@ -29,6 +29,8 @@ public abstract class Server {
 	/**
 	 * start server
 	 *
+	 * 多肽
+	 *
 	 * @param xxlRpcProviderFactory
 	 * @throws Exception
 	 */

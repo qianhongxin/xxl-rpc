@@ -96,14 +96,20 @@ public class XxlRpcInvokerFactory {
     // ---------------------- future-response pool ----------------------
 
     // XxlRpcFutureResponseFactory
-
+    // 保存调用返回的结果，因为是长连接，一个连接上的多个网络请求通过requestId和response绑定，好识别
     private ConcurrentMap<String, XxlRpcFutureResponse> futureResponsePool = new ConcurrentHashMap<String, XxlRpcFutureResponse>();
+
+    // 向缓存中设置返回值
     public void setInvokerFuture(String requestId, XxlRpcFutureResponse futureResponse){
         futureResponsePool.put(requestId, futureResponse);
     }
+
+    // 取到结果后，通过requestId删除缓存中的返回值
     public void removeInvokerFuture(String requestId){
         futureResponsePool.remove(requestId);
     }
+
+    // 调用返回后，回调这个方法，拿到执行结果
     public void notifyInvokerFuture(String requestId, final XxlRpcResponse xxlRpcResponse){
 
         // get
@@ -151,17 +157,23 @@ public class XxlRpcInvokerFactory {
             synchronized (this) {
                 if (responseCallbackThreadPool == null) {
                     responseCallbackThreadPool = new ThreadPoolExecutor(
+                            // 核心线程数，线程池会持有的最小数量
                             10,
+                            // 最大线程数，最大值
                             100,
+                            // 当池中的线程数大于核心线程数时，空闲的线程空闲时间大于60L时，会被os回收
                             60L,
                             TimeUnit.SECONDS,
+                            // 有界队列，防止OOM
                             new LinkedBlockingQueue<Runnable>(1000),
+                            // 自定义的线程创建工厂
                             new ThreadFactory() {
                                 @Override
                                 public Thread newThread(Runnable r) {
                                     return new Thread(r, "xxl-rpc, XxlRpcInvokerFactory-responseCallbackThreadPool-" + r.hashCode());
                                 }
                             },
+                            // 自定义的任务过多时的拒绝策略
                             new RejectedExecutionHandler() {
                                 @Override
                                 public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {

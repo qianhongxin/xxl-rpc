@@ -24,6 +24,8 @@ import java.util.Set;
 /**
  * xxl-rpc invoker factory, init service-registry and spring-bean by annotation (for spring)
  *
+ * 利用spring启动调用者invoker
+ *
  * @author xuxueli 2018-10-19
  */
 public class XxlRpcSpringInvokerFactory extends InstantiationAwareBeanPostProcessorAdapter implements InitializingBean,DisposableBean, BeanFactoryAware {
@@ -55,6 +57,7 @@ public class XxlRpcSpringInvokerFactory extends InstantiationAwareBeanPostProces
         xxlRpcInvokerFactory.start();
     }
 
+    // 对有@XxlRpcReference注解的bean，做再次代理
     @Override
     public boolean postProcessAfterInstantiation(final Object bean, final String beanName) throws BeansException {
 

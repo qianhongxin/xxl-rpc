@@ -17,6 +17,8 @@ import java.util.Map;
 /**
  * xxl-rpc provider (for spring)
  *
+ * 利用spring容器启动provider
+ *
  * @author xuxueli 2018-10-18 18:09:20
  */
 public class XxlRpcSpringProviderFactory extends XxlRpcProviderFactory implements ApplicationContextAware, InitializingBean,DisposableBean {
