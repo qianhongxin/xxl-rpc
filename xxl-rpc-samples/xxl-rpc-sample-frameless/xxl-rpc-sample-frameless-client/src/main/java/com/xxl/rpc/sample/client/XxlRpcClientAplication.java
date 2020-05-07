@@ -1,17 +1,16 @@
 package com.xxl.rpc.sample.client;
 
-import com.xxl.rpc.remoting.invoker.XxlRpcInvokerFactory;
-import com.xxl.rpc.remoting.invoker.call.CallType;
-import com.xxl.rpc.remoting.invoker.call.XxlRpcInvokeCallback;
-import com.xxl.rpc.remoting.invoker.call.XxlRpcInvokeFuture;
-import com.xxl.rpc.remoting.invoker.reference.XxlRpcReferenceBean;
-import com.xxl.rpc.remoting.invoker.route.LoadBalance;
-import com.xxl.rpc.remoting.net.NetEnum;
+import com.xxl.rpc.core.remoting.invoker.XxlRpcInvokerFactory;
+import com.xxl.rpc.core.remoting.invoker.call.CallType;
+import com.xxl.rpc.core.remoting.invoker.call.XxlRpcInvokeCallback;
+import com.xxl.rpc.core.remoting.invoker.call.XxlRpcInvokeFuture;
+import com.xxl.rpc.core.remoting.invoker.reference.XxlRpcReferenceBean;
+import com.xxl.rpc.core.remoting.invoker.route.LoadBalance;
+import com.xxl.rpc.core.remoting.net.impl.netty.client.NettyClient;
 import com.xxl.rpc.sample.api.DemoService;
 import com.xxl.rpc.sample.api.dto.UserDTO;
-import com.xxl.rpc.serialize.Serializer;
+import com.xxl.rpc.core.serialize.impl.HessianSerializer;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +20,9 @@ import java.util.concurrent.TimeUnit;
 public class XxlRpcClientAplication {
 
 	public static void main(String[] args) throws Exception {
+
+		/*String serviceKey = XxlRpcProviderFactory.makeServiceKey(DemoService.class.getName(), null);
+		XxlRpcInvokerFactory.getInstance().getServiceRegistry().registry(new HashSet<String>(Arrays.asList(serviceKey)), "127.0.0.1:7080");*/
 
 		// test
 		testSYNC();
@@ -33,20 +35,6 @@ public class XxlRpcClientAplication {
 		// stop client invoker factory (default by getInstance, exist inner thread, need destory)
 		XxlRpcInvokerFactory.getInstance().stop();
 
-
-
-		// init invoker factory
-		/*XxlRpcInvokerFactory invokerFactory = new XxlRpcInvokerFactory();
-		invokerFactory.start();*/
-
-		/*String serviceKey = XxlRpcProviderFactory.makeServiceKey(DemoService.class.getName(), null);		// registry local
-		invokerFactory.getServiceRegistry().registry(new HashSet<String>(Arrays.asList(serviceKey)), "127.0.0.1:7080");*/
-
-		// test
-
-		// stop invoker factory
-		/*invokerFactory.stop();*/
-
 	}
 
 
@@ -54,10 +42,22 @@ public class XxlRpcClientAplication {
 	/**
 	 * CallType.SYNC
 	 */
-	public static void testSYNC(){
+	public static void testSYNC() throws Exception {
 		// init client
-		DemoService demoService = (DemoService) new XxlRpcReferenceBean(NetEnum.NETTY, Serializer.SerializeEnum.HESSIAN.getSerializer(), CallType.SYNC, LoadBalance.ROUND,
-				DemoService.class, null, 500, "127.0.0.1:7080", null, null, null).getObject();
+		XxlRpcReferenceBean referenceBean = new XxlRpcReferenceBean();
+		referenceBean.setClient(NettyClient.class);
+		referenceBean.setSerializer(HessianSerializer.class);
+		referenceBean.setCallType(CallType.SYNC);
+		referenceBean.setLoadBalance(LoadBalance.ROUND);
+		referenceBean.setIface(DemoService.class);
+		referenceBean.setVersion(null);
+		referenceBean.setTimeout(500);
+		referenceBean.setAddress("127.0.0.1:7080");
+		referenceBean.setAccessToken(null);
+		referenceBean.setInvokeCallback(null);
+		referenceBean.setInvokerFactory(null);
+
+		DemoService demoService = (DemoService) referenceBean.getObject();
 
 		// test
         UserDTO userDTO = demoService.sayHi("[SYNC]jack");
@@ -80,10 +80,22 @@ public class XxlRpcClientAplication {
 	/**
 	 * CallType.FUTURE
 	 */
-	public static void testFUTURE() throws ExecutionException, InterruptedException {
+	public static void testFUTURE() throws Exception {
 		// client test
-		DemoService demoService = (DemoService) new XxlRpcReferenceBean(NetEnum.NETTY, Serializer.SerializeEnum.HESSIAN.getSerializer(), CallType.FUTURE, LoadBalance.ROUND,
-				DemoService.class, null, 500, "127.0.0.1:7080", null, null, null).getObject();
+		XxlRpcReferenceBean referenceBean = new XxlRpcReferenceBean();
+		referenceBean.setClient(NettyClient.class);
+		referenceBean.setSerializer(HessianSerializer.class);
+		referenceBean.setCallType(CallType.FUTURE);
+		referenceBean.setLoadBalance(LoadBalance.ROUND);
+		referenceBean.setIface(DemoService.class);
+		referenceBean.setVersion(null);
+		referenceBean.setTimeout(500);
+		referenceBean.setAddress("127.0.0.1:7080");
+		referenceBean.setAccessToken(null);
+		referenceBean.setInvokeCallback(null);
+		referenceBean.setInvokerFactory(null);
+
+		DemoService demoService = (DemoService) referenceBean.getObject();
 
 		// test
 		demoService.sayHi("[FUTURE]jack" );
@@ -97,10 +109,22 @@ public class XxlRpcClientAplication {
 	/**
 	 * CallType.CALLBACK
 	 */
-	public static void testCALLBACK() throws ExecutionException, InterruptedException {
+	public static void testCALLBACK() throws Exception {
 		// client test
-		DemoService demoService = (DemoService) new XxlRpcReferenceBean(NetEnum.NETTY, Serializer.SerializeEnum.HESSIAN.getSerializer(), CallType.CALLBACK, LoadBalance.ROUND,
-				DemoService.class, null, 500, "127.0.0.1:7080", null, null, null).getObject();
+		XxlRpcReferenceBean referenceBean = new XxlRpcReferenceBean();
+		referenceBean.setClient(NettyClient.class);
+		referenceBean.setSerializer(HessianSerializer.class);
+		referenceBean.setCallType(CallType.CALLBACK);
+		referenceBean.setLoadBalance(LoadBalance.ROUND);
+		referenceBean.setIface(DemoService.class);
+		referenceBean.setVersion(null);
+		referenceBean.setTimeout(500);
+		referenceBean.setAddress("127.0.0.1:7080");
+		referenceBean.setAccessToken(null);
+		referenceBean.setInvokeCallback(null);
+		referenceBean.setInvokerFactory(null);
+
+		DemoService demoService = (DemoService) referenceBean.getObject();
 
 
         // test
@@ -123,10 +147,22 @@ public class XxlRpcClientAplication {
 	/**
 	 * CallType.ONEWAY
 	 */
-	public static void testONEWAY() throws ExecutionException, InterruptedException {
+	public static void testONEWAY() throws Exception {
 		// client test
-		DemoService demoService = (DemoService) new XxlRpcReferenceBean(NetEnum.NETTY, Serializer.SerializeEnum.HESSIAN.getSerializer(), CallType.ONEWAY, LoadBalance.ROUND,
-				DemoService.class, null, 500, "127.0.0.1:7080", null, null, null).getObject();
+		XxlRpcReferenceBean referenceBean = new XxlRpcReferenceBean();
+		referenceBean.setClient(NettyClient.class);
+		referenceBean.setSerializer(HessianSerializer.class);
+		referenceBean.setCallType(CallType.ONEWAY);
+		referenceBean.setLoadBalance(LoadBalance.ROUND);
+		referenceBean.setIface(DemoService.class);
+		referenceBean.setVersion(null);
+		referenceBean.setTimeout(500);
+		referenceBean.setAddress("127.0.0.1:7080");
+		referenceBean.setAccessToken(null);
+		referenceBean.setInvokeCallback(null);
+		referenceBean.setInvokerFactory(null);
+
+		DemoService demoService = (DemoService) referenceBean.getObject();
 
 		// test
         demoService.sayHi("[ONEWAY]jack");
